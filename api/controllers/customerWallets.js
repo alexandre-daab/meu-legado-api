@@ -64,15 +64,15 @@ module.exports = (app) => {
             port: 465,
             secure: true,
             auth: {
-                user: "meulegado@daab.com.br",
-                pass: "Carol0608",
+                user: "XXX@XXXX.com.br",
+                pass: "XXX",
             },
         });
         console.log("BORGES");
 
         let info = await transporter.sendMail({
-            from: '"Meu Legado" <meulegado@daab.com.br>',
-            to: "augustusborges@gmail.com",
+            from: '"Meu Legado" <XXX@XXX.com.br>',
+            to: "XXX@gmail.com",
             subject: "EMAIL TESTE DE DEV MEU LEGADO",
             text: "TESTE -- O arquivo nao foi dispEste é um emaild e teste do projeto meu legado",
             html: "<b><i>TESTE -- O arquivo nao foi dispEste é um emaild e teste do projeto meu legado</i></b>",
