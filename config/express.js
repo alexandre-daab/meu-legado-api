@@ -2,9 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const config = require("config");
 const consign = require("consign");
+const cors = require("cors");
 
 module.exports = () => {
     const app = express();
+
+    app.use(cors());
 
     // SETANDO VARIÁVEIS DA APLICAÇÃO
     app.set("port", process.env.PORT || config.get("server.port"));
@@ -12,7 +15,7 @@ module.exports = () => {
     // MIDDLEWARES
     app.use(bodyParser.json());
 
-    consign({ cwd: "api" }).include("models").then("controllers").then("routes").into(app);
+    consign({ cwd: "api" }).then("models").then("controllers").then("routes").into(app);
 
     //require("../api/routes/customerWallets")(app);
 

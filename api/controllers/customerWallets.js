@@ -1,9 +1,23 @@
 module.exports = (app) => {
-    //const customerWalletsDB = app.models.customerWalletDB;
+    const customerWalletsDB = app.models.customerWalletsDB;
+    const nodemailer = require("nodemailer");
+    const { v4: uuidv4 } = require("uuid");
     const controller = {};
 
     var db = require("../../db");
     var Customer = db.Mongoose.model("mensagens", db.CustomerSchema, "mensagens");
+
+    controller.listarClientes = async (req, res) => {
+        res.status(200);
+        res.json(await customerWalletsDB.listar());
+        res.end();
+    };
+
+    controller.listarClientePorID = async (req, res) => {
+        res.status(200);
+        res.json(await customerWalletsDB.listarClientePorID(req.params.id));
+        res.end();
+    };
 
     controller.listCustomerWallets = (req, res) => {
         Customer.find({})
@@ -25,8 +39,9 @@ module.exports = (app) => {
     };
 
     controller.insertCustomer = (req, res) => {
+        const idNovo = uuidv4();
         var newcustomer = new Customer({
-            _id: req.body._id,
+            _id: idNovo,
             data: req.body.name,
             email: req.body.email,
             mensagem: req.body.mensagem,
@@ -40,6 +55,31 @@ module.exports = (app) => {
             res.json(newcustomer);
             res.end();
         });
+    };
+
+    controller.enviaEmails = async (req, res) => {
+        console.log("ALEXA");
+        let transporter = nodemailer.createTransport({
+            host: "smtp.kinghost.net",
+            port: 465,
+            secure: true,
+            auth: {
+                user: "meulegado@daab.com.br",
+                pass: "Carol0608",
+            },
+        });
+        console.log("BORGES");
+
+        let info = await transporter.sendMail({
+            from: '"Meu Legado" <meulegado@daab.com.br>',
+            to: "augustusborges@gmail.com",
+            subject: "EMAIL TESTE DE DEV MEU LEGADO",
+            text: "TESTE -- O arquivo nao foi dispEste é um emaild e teste do projeto meu legado",
+            html: "<b><i>TESTE -- O arquivo nao foi dispEste é um emaild e teste do projeto meu legado</i></b>",
+        });
+        console.log("Message sent: %s", info.messageId);
+        res.status(200);
+        res.json({ MenssagemEnviada: info.messageId });
     };
 
     return controller;
